@@ -127,7 +127,11 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
-          cache: gradle
+
+      # Not setup-java's `cache: gradle`: that keys on build files, and ours
+      # only exist after `expo prebuild` generates android/. setup-gradle caches
+      # the Gradle home (wrapper, dependencies, build cache) without them.
+      - uses: gradle/actions/setup-gradle@v4
 
       - uses: actions/setup-node@v5
         with:
