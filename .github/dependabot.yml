@@ -1,0 +1,38 @@
+version: 2
+updates:
+  # One lockfile for every workspace. Expo SDK packages move together and must
+  # match the SDK (`npx expo install --fix`), so they are left to deliberate SDK
+  # upgrades instead of piecemeal bumps; everything else is grouped so a
+  # routine week is one PR, not ten.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: 'expo'
+      - dependency-name: 'expo-*'
+      - dependency-name: '@expo/*'
+      - dependency-name: 'react'
+      - dependency-name: 'react-dom'
+      - dependency-name: 'react-native'
+      - dependency-name: 'react-native-*'
+      - dependency-name: '@react-native-async-storage/async-storage'
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Workflow actions are pinned by major tag; this keeps them from going stale.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']
+
+  # Base image of the game server.
+  - package-ecosystem: docker
+    directory: /apps/server
+    schedule:
+      interval: monthly

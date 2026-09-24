@@ -1,0 +1,22 @@
+# Production-like stack: Redis + game server.
+#   docker compose up --build
+# Scale out by adding more `server` services (each needs its own PUBLIC_ADDRESS
+# reachable by clients) behind a load balancer — see README "Scaling".
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ['redis-server', '--save', '', '--appendonly', 'no']
+
+  server:
+    build:
+      context: .
+      dockerfile: apps/server/Dockerfile
+    restart: unless-stopped
+    depends_on: [redis]
+    environment:
+      PORT: 2567
+      REDIS_URL: redis://redis:6379
+      CORS_ORIGIN: '*'
+    ports:
+      - '2567:2567'

@@ -1,0 +1,36 @@
+{
+  "name": "gridlock",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Gridlock \u2014 online multiplayer wall-and-race strategy game for 2 to 6 players",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,mobile -c magenta,cyan \"npm run dev -w @gridlock/server\" \"npm run start -w @gridlock/mobile\"",
+    "dev:server": "npm run dev -w @gridlock/server",
+    "dev:mobile": "npm run start -w @gridlock/mobile",
+    "dev:web": "npm run web -w @gridlock/mobile",
+    "dev:android": "npm run go:android -w @gridlock/mobile",
+    "build:server": "npm run build -w @gridlock/server",
+    "start:server": "npm run start -w @gridlock/server",
+    "test": "npm run test -w @gridlock/engine && npm run test -w @gridlock/server",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint -w @gridlock/mobile",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:coverage": "npm run test:coverage -w @gridlock/engine && npm run test:coverage -w @gridlock/server",
+    "build:web": "npm run export:web -w @gridlock/mobile",
+    "version:check": "node tool/version.mjs check",
+    "version:set": "node tool/version.mjs set"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^3.2.7",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.9.9"
+  }
+}
