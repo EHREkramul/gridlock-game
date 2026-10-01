@@ -1,6 +1,6 @@
 # Build from the repository root:
 #   docker build -f apps/server/Dockerfile -t gridlock-server .
-FROM node:22-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /repo
 COPY package.json package-lock.json ./
 COPY packages/engine/package.json packages/engine/
@@ -12,7 +12,7 @@ COPY apps/server apps/server
 RUN npm run build -w @gridlock/server \
  && npm prune --omit=dev --workspace=@gridlock/server --no-audit --no-fund
 
-FROM node:22-alpine
+FROM node:26-alpine
 ENV NODE_ENV=production PORT=2567
 WORKDIR /app
 COPY --from=build /repo/node_modules ./node_modules
